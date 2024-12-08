@@ -1,7 +1,7 @@
 
 export const Block = ({children, onClick, className}) => {
   return (
-    <div className={`bg-pure-white rounded-xl ${className} p-2`} onClick={onClick}>
+    <div className={`${className || ""} bg-pure-white rounded-xl p-2`} onClick={onClick}>
       {children}
     </div>
   )

@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { useQuiz } from "./components/hooks/useQuiz";
 import {Main} from "./components/layout/Main";
 import {Grid} from "./components/layout/Grid";
-import {Welcome} from "./components/ui/Welcome";
+import {Welcome} from "./components/quiz/Welcome";
 import { Block } from "./components/layout/Block";
-import { Topic } from "./components/ui/Topic";
-import {Question} from "./components/ui/Question";
-import {Answer} from "./components/ui/Answer";
+import { Topic } from "./components/quiz/Topic";
+import {Question} from "./components/quiz/Question";
+import {Answer} from "./components/quiz/Answer";
 import {Button} from "./components/ui/Button";
 import {Header} from "./components/layout/Header";
+import { ThemmeToggler } from "./components/ui/ThemeToggler";
+import { ThemeProvider } from "./components/context/ThemeProvider";
 
 function App() {
   
@@ -86,15 +88,17 @@ function App() {
   }
 
   return (
-    <Main>
-      <Header>
-      {chosenTopic ? <Topic {...chosenTopic} /> : <div></div>}
-      THEME TOGGLER
-      </Header>
-      <Grid>
-        {renderApp()}
-      </Grid>
-    </Main>
+    <ThemeProvider>
+      <Main>
+        <Header>
+          {chosenTopic && <Topic {...chosenTopic} /> || <div></div>}
+          <ThemmeToggler />
+        </Header>
+        <Grid>
+          {renderApp()}
+        </Grid>
+      </Main>
+    </ThemeProvider>
   );
 }
 
