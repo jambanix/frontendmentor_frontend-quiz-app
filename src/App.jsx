@@ -1,18 +1,20 @@
 import { useEffect } from "react";
 import { useQuiz } from "./components/hooks/useQuiz";
-import {Main} from "./components/display/Main";
-import {Grid} from "./components/display/Grid";
-import {Welcome} from "./components/display/left/Welcome";
-import { Block } from "./components/display/right/Block";
-import { Topic } from "./components/display/Topic";
-import {Question} from "./components/display/left/Question";
+import {Main} from "./components/layout/Main";
+import {Grid} from "./components/layout/Grid";
+import {Welcome} from "./components/ui/Welcome";
+import { Block } from "./components/layout/Block";
+import { Topic } from "./components/ui/Topic";
+import {Question} from "./components/ui/Question";
 import {Answer} from "./components/ui/Answer";
-import {Button} from "./components/display/Button";
+import {Button} from "./components/ui/Button";
+import {Header} from "./components/layout/Header";
 
 function App() {
   
   const {
     currentQuestionText,
+    chosenTopic,
     currentQuestionOptions,
     availableTopics,
     quizStatus,
@@ -22,7 +24,9 @@ function App() {
     setQuizData,
     setSelectedTopic,
     setSelectedAnswer,
-    submitAnswer
+    setNextQuestion,
+    submitAnswer,
+    reset
   } = useQuiz();
 
   // load data on first render
@@ -33,9 +37,10 @@ function App() {
 
   // event handlers
   const handleSelectTopic = (topic_id) => setSelectedTopic(topic_id);
-  const handleSelectAnswer = (answer_id) => setSelectedAnswer(answer_id);
-  const handleNextQuestion = () => null;
+  const handleSelectAnswer = (answer_id) => !submittedAnswer && setSelectedAnswer(answer_id);
+  const handleNextQuestion = () => setNextQuestion();
   const handleSubmitAnswer = () => submitAnswer();
+  const handlePlayAgain = () => reset();
 
   // decide which components to show based on the current state of the quiz
   const renderApp = () => {
@@ -44,22 +49,29 @@ function App() {
         return (
           <>
             <Welcome />
-            {availableTopics.map(topic => <Block key={topic.id} onClick={() => handleSelectTopic(topic.id)}><Topic {...topic} /></Block>)}
+            <div className="flex flex-col gap-3">
+              {availableTopics.map(topic => <Block key={topic.id} onClick={() => handleSelectTopic(topic.id)}><Topic {...topic} /></Block>)}
+            </div>
           </>
         )
 
       case "in progress":
         return (
           <>
+          {/* Left side */}
             <Question question={currentQuestionText} />
-            {currentQuestionOptions.map((option, ix) => <Answer key={ix} {...{selectedAnswer, correctAnswer, submittedAnswer}} {...option} onClick={handleSelectAnswer}/>)}
-            {
-              selectedAnswer
-              ? submittedAnswer
-                ? <Button onClick={handleNextQuestion}>Next question</Button>
-                : <Button onClick={handleSubmitAnswer}>Submit answer</Button>
-              : <Button disabled>Select an answer</Button>
-            }
+
+            {/* Right side */}
+            <div className="flex flex-col gap-3">
+              {currentQuestionOptions.map((option, ix) => <Answer key={ix} {...{selectedAnswer, correctAnswer, submittedAnswer}} {...option} disabled={submittedAnswer !== null} onClick={handleSelectAnswer}/>)}
+              {
+                selectedAnswer
+                ? submittedAnswer
+                  ? <Button onClick={handleNextQuestion}>Next question</Button>
+                  : <Button onClick={handleSubmitAnswer}>Submit answer</Button>
+                : <Button disabled>Select an answer</Button>
+              }
+            </div>
           </>
         )
 
@@ -67,7 +79,7 @@ function App() {
         return (
           <>
             <div>Finished</div>
-            <Button>Play again</Button>
+            <Button onClick={handlePlayAgain}>Play again</Button>
           </>
         )
     }
@@ -75,8 +87,11 @@ function App() {
 
   return (
     <Main>
+      <Header>
+      {chosenTopic ? <Topic {...chosenTopic} /> : <div></div>}
+      THEME TOGGLER
+      </Header>
       <Grid>
-        {console.log("Rendered")}
         {renderApp()}
       </Grid>
     </Main>

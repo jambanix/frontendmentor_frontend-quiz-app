@@ -11,6 +11,7 @@ const initialState = {
 };
 
 const getOptionLetter = (index) => ["A", "B", "C", "D"].at(index);
+
 const quizReducer = (state, action) => {
   switch (action.type) {
     // the base data from data.json
@@ -56,6 +57,8 @@ const quizReducer = (state, action) => {
 export const useQuiz = () => {
   const [quizState, quizDispatch] = useReducer(quizReducer, initialState);
 
+  const MAX_QUIZ_ID = quizState.chosenTopic?.questions.length;
+
   const currentQuestionInfo = quizState.chosenTopic?.questions.find(question => question.id === quizState.currentQuestion);
   const currentQuestionText = currentQuestionInfo?.question;
   const currentQuestionOptions = currentQuestionInfo?.options;
@@ -64,6 +67,7 @@ export const useQuiz = () => {
   const selectedAnswer = quizState.selectedAnswer;
   const submittedAnswer = quizState.submittedAnswer;
   const correctAnswer = currentQuestionInfo?.options.find(option => option.correct).id;
+  const chosenTopic = quizState.chosenTopic;
 
   // load the data from the json file and set IDs for each topic, question, answer
   // id's used for control over whole quiz state. add correct property to each option based on answer
@@ -90,12 +94,37 @@ export const useQuiz = () => {
 
   const setSelectedTopic = (id) => quizDispatch({ type: "SET_TOPIC", payload: id });
   const setSelectedAnswer = (id) => quizDispatch({ type: "SET_SELECTED_ANSWER", payload: id });
-  const submitAnswer = () => quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
 
-  console.log(quizState.quizData);
+  const submitAnswer = () => {
+    quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
+    if (selectedAnswer === correctAnswer) {
+      quizDispatch({ type: "SET_SCORE", payload: quizState.score + 1 });
+    }
+  }
+
+  const setNextQuestion = () => {
+    if (quizState.currentQuestion < MAX_QUIZ_ID) {
+      quizDispatch({ type: "SET_CURRENT_QUESTION", payload: quizState.currentQuestion + 1 });
+      quizDispatch({ type: "SET_SELECTED_ANSWER", payload: null });
+      quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
+    } 
+    else {
+      quizDispatch({ type: "SET_QUIZ_STATUS", payload: "finished"});
+      quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
+      }
+    }
+  const reset = () => {
+    quizDispatch({ type: "SET_QUIZ_STATUS", payload: "pending" });
+    quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
+    quizDispatch({ type: "SET_SELECTED_ANSWER", payload: null });
+    quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
+    quizDispatch({ type: "SET_SCORE", payload: 0 });
+  }
+
   return {
     currentQuestionText,
     currentQuestionOptions,
+    chosenTopic,
     availableTopics,
     quizStatus,
     selectedAnswer,
@@ -104,6 +133,8 @@ export const useQuiz = () => {
     setQuizData,
     setSelectedTopic,
     setSelectedAnswer,
-    submitAnswer
+    setNextQuestion,
+    submitAnswer,
+    reset
   };
 };
