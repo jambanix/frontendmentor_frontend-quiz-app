@@ -14,6 +14,7 @@ const getOptionLetter = (index) => ["A", "B", "C", "D"].at(index);
 
 const quizReducer = (state, action) => {
   switch (action.type) {
+
     // the base data from data.json
     case "SET_QUIZ_DATA":
       return { ...state, quizData: action.payload };
@@ -34,23 +35,44 @@ const quizReducer = (state, action) => {
 
     // set the submitted answer and check if it's correct
     case "SET_SUBMITTED_ANSWER":
-      return {
-        ...state,
-        submittedAnswer: state.selectedAnswer
+      if (state.selectedAnswer === action.payload) {
+        return { 
+          ...state,
+          submittedAnswer: state.selectedAnswer,
+          score: state.score + 1,
+        };
       }
+      else {
+        return { ...state, submittedAnswer: state.selectedAnswer };
+      }
+
+    // set the current question based on ID's. if end of quiz, set back to 1 and set status to finished
     case "SET_CURRENT_QUESTION":
+
+      // quiz still ongoing, reset selected answer and submitted answer
+      if (state.currentQuestion < action.payload) {
+        return {
+          ...state,
+          currentQuestion: state.currentQuestion + 1,
+          selectedAnswer: null,
+          submittedAnswer: null
+        }
+      }
+
+      // quiz finished, reset score and set status to finished
+      else {
+        return {
+          ...state,
+          quizStatus: "finished",
+          currentQuestion: 1,
+        }
+      }
+
+    case "RESET":
       return {
-        ...state,
-        currentQuestion: action.payload,
-      };
-    case "SET_SCORE":
-      return { ...state, score: action.payload };
-    case "SET_IS_CORRECT":
-      return { ...state, selectedAnswerCorrect: action.payload };
-    case "SET_QUIZ_STATUS":
-      return { ...state, quizStatus: action.payload };
-    default:
-      return state;
+        ...initialState,
+        quizData: state.quizData
+      }
   }
 };
 
@@ -59,6 +81,7 @@ export const useQuiz = () => {
   const [quizState, quizDispatch] = useReducer(quizReducer, initialState);
 
   const currentQuestionObj = quizState.chosenTopic?.questions.find(question => question.id === quizState.currentQuestion);
+
   const currentQuestion = {
     number: quizState.currentQuestion,
     text: currentQuestionObj?.question,
@@ -104,34 +127,9 @@ export const useQuiz = () => {
 
   const setSelectedTopic = (id) => quizDispatch({ type: "SET_TOPIC", payload: id });
   const setSelectedAnswer = (id) => quizDispatch({ type: "SET_SELECTED_ANSWER", payload: id });
-
-  const submitAnswer = () => {
-    quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
-    if (answers.selected === answers.correct) {
-      quizDispatch({ type: "SET_SCORE", payload: quizState.score + 1 });
-    }
-  }
-
-  const setNextQuestion = () => {
-    if (quizState.currentQuestion < quiz.maxQuestionNumber) {
-      quizDispatch({ type: "SET_CURRENT_QUESTION", payload: quizState.currentQuestion + 1 });
-      quizDispatch({ type: "SET_SELECTED_ANSWER", payload: null });
-      quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
-    } 
-    else {
-      quizDispatch({ type: "SET_QUIZ_STATUS", payload: "finished"});
-      quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
-      }
-    }
-
-  const reset = () => {
-    quizDispatch({ type: "SET_QUIZ_STATUS", payload: "pending" });
-    quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
-    quizDispatch({ type: "SET_SELECTED_ANSWER", payload: null });
-    quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
-    quizDispatch({ type: "SET_SCORE", payload: 0 });
-  }
-
+  const submitAnswer = () => quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: answers.correct});
+  const setNextQuestion = () => quizDispatch({ type: "SET_CURRENT_QUESTION", payload: quiz.maxQuestionNumber });
+  const reset = () => quizDispatch({ type: "RESET" });
   
 
   return {
