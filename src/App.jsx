@@ -1,33 +1,25 @@
 import { useEffect } from "react";
 import { useQuiz } from "./components/hooks/useQuiz";
-import {Main} from "./components/layout/Main";
-import {Grid} from "./components/layout/Grid";
-import {Welcome} from "./components/quiz/Welcome";
-import { Block } from "./components/layout/Block";
+import { Main } from "./components/layout/Main";
+import { Grid } from "./components/layout/Grid";
 import { Topic } from "./components/quiz/Topic";
-import {Question} from "./components/quiz/Question";
-import {Answer} from "./components/quiz/Answer";
-import {Button} from "./components/ui/Button";
-import {Header} from "./components/layout/Header";
+import { Header } from "./components/layout/Header";
 import { ThemmeToggler } from "./components/ui/ThemeToggler";
 import { ThemeProvider } from "./components/context/ThemeProvider";
+import { WelcomeState } from "./components/quiz_state/WelcomeState";
+import { InProgressState } from "./components/quiz_state/InProgressState";
+import { FinishedState } from "./components/quiz_state/FinishedState";
 
 function App() {
-  
   const {
-    currentQuestionText,
-    chosenTopic,
-    currentQuestionOptions,
-    availableTopics,
-    quizStatus,
-    selectedAnswer,
-    submittedAnswer,
-    correctAnswer,
+    currentQuestion,
+    answers,
+    quiz,
     setQuizData,
     setSelectedTopic,
     setSelectedAnswer,
-    setNextQuestion,
     submitAnswer,
+    setNextQuestion,
     reset
   } = useQuiz();
 
@@ -35,68 +27,57 @@ function App() {
   useEffect(() => {
     fetch("data.json")
       .then((response) => response.json())
-      .then(data => setQuizData(data))}, []);
+      .then((data) => setQuizData(data));
+  }, []);
 
   // event handlers
   const handleSelectTopic = (topic_id) => setSelectedTopic(topic_id);
-  const handleSelectAnswer = (answer_id) => !submittedAnswer && setSelectedAnswer(answer_id);
+  const handleSelectAnswer = (answer_id) =>
+    !answers.submitted && setSelectedAnswer(answer_id);
   const handleNextQuestion = () => setNextQuestion();
   const handleSubmitAnswer = () => submitAnswer();
   const handlePlayAgain = () => reset();
 
   // decide which components to show based on the current state of the quiz
   const renderApp = () => {
-    switch (quizStatus) {
+    switch (quiz.status) {
       case "pending":
         return (
-          <>
-            <Welcome />
-            <div className="flex flex-col gap-3">
-              {availableTopics.map(topic => <Block key={topic.id} onClick={() => handleSelectTopic(topic.id)}><Topic {...topic} /></Block>)}
-            </div>
-          </>
-        )
+          <WelcomeState
+            availableTopics={quiz.availableTopics}
+            onSelectTopic={handleSelectTopic}
+          />
+        );
 
       case "in progress":
         return (
-          <>
-          {/* Left side */}
-            <Question question={currentQuestionText} />
-
-            {/* Right side */}
-            <div className="flex flex-col gap-3">
-              {currentQuestionOptions.map((option, ix) => <Answer key={ix} {...{selectedAnswer, correctAnswer, submittedAnswer}} {...option} disabled={submittedAnswer !== null} onClick={handleSelectAnswer}/>)}
-              {
-                selectedAnswer
-                ? submittedAnswer
-                  ? <Button onClick={handleNextQuestion}>Next question</Button>
-                  : <Button onClick={handleSubmitAnswer}>Submit answer</Button>
-                : <Button disabled>Select an answer</Button>
-              }
-            </div>
-          </>
-        )
+          <InProgressState
+            currentQuestionText={currentQuestion.text}
+            currentQuestionNumber={currentQuestion.number}
+            maxQuestionNumber={quiz.maxQuestionNumber}
+            currentQuestionOptions={currentQuestion.options}
+            selectedAnswer={answers.selected}
+            correctAnswer={answers.correct}
+            submittedAnswer={answers.submitted}
+            onSelectAnswer={handleSelectAnswer}
+            onSubmitAnswer={handleSubmitAnswer}
+            onNextQuestion={handleNextQuestion}
+          />
+        );
 
       case "finished":
-        return (
-          <>
-            <div>Finished</div>
-            <Button onClick={handlePlayAgain}>Play again</Button>
-          </>
-        )
+        return <FinishedState onPlayAgain={handlePlayAgain} />;
     }
-  }
+  };
 
   return (
     <ThemeProvider>
       <Main>
         <Header>
-          {chosenTopic && <Topic {...chosenTopic} /> || <div></div>}
+          {(quiz.chosenTopic && <Topic {...quiz.chosenTopic} />) || <div></div>}
           <ThemmeToggler />
         </Header>
-        <Grid>
-          {renderApp()}
-        </Grid>
+        <Grid>{renderApp()}</Grid>
       </Main>
     </ThemeProvider>
   );

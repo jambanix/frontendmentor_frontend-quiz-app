@@ -1,4 +1,5 @@
 import { Block } from "../layout/Block";
+import { useState } from "react";
 
 export const Answer = ({
   letter,
@@ -9,6 +10,8 @@ export const Answer = ({
   correctAnswer,
   submittedAnswer
 }) => {
+
+  const [isHovering, setIsHovering] = useState(false);
 
   const handleClick = () => onClick(id);
   const isSelected = selectedAnswer === id;
@@ -42,6 +45,11 @@ export const Answer = ({
   }
 
   const letterClassName = () => {
+
+    if (isHovering && !submittedAnswer && !isSelected) {
+      return "bg-purple/20 text-purple";
+    }
+
     if (isSelected && !isSubmitted) {
       return "bg-purple text-pure-white";
     }
@@ -65,16 +73,23 @@ export const Answer = ({
     }
   }
   return (
-    <Block onClick={handleClick} className={`${bodyClassName()} relative`}>
-      <div className="flex gap-4 items-center">
-        <div className={`${letterClassName()} w-10 h-10 p-2 rounded-xl transition-colors flex items-center justify-center font-semibold`}>{letter}</div>
-        <div>{text}</div>
-      </div>
-      {/* {hasBeenChosenIncorrect &&
-        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+    <Block onClick={handleClick} className={`${bodyClassName()}`} onMouseOver={() => setIsHovering(true)} onMouseOut={() => setIsHovering(false)}>
+      <div className="flex justify-between">
+        <div className="flex gap-4 items-center">
 
+          {/* Letter */}
+          <div className={`${letterClassName()} w-10 h-10 p-2 rounded-xl transition-colors flex items-center justify-center font-bold`}>{letter}</div>
+
+          {/* Answer */}
+          <div>{text}</div>
         </div>
-      } */}
+
+        {/* Correct/Incorrect icon */}
+        <div className="flex items-center">
+          {hasBeenChosenCorrect && <img src="images/icon-correct.svg" alt="correct" className="w-5 h-5"></img>}
+          {hasBeenChosenIncorrect && <img src="images/icon-incorrect.svg" alt="incorect" className="w-5 h-5"></img>}
+        </div>
+      </div>
     </Block>
   );
 };

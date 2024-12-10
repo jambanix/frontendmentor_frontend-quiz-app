@@ -55,19 +55,29 @@ const quizReducer = (state, action) => {
 };
 
 export const useQuiz = () => {
+  
   const [quizState, quizDispatch] = useReducer(quizReducer, initialState);
 
-  const MAX_QUIZ_ID = quizState.chosenTopic?.questions.length;
+  const currentQuestionObj = quizState.chosenTopic?.questions.find(question => question.id === quizState.currentQuestion);
+  const currentQuestion = {
+    number: quizState.currentQuestion,
+    text: currentQuestionObj?.question,
+    options: currentQuestionObj?.options,
+  }
 
-  const currentQuestionInfo = quizState.chosenTopic?.questions.find(question => question.id === quizState.currentQuestion);
-  const currentQuestionText = currentQuestionInfo?.question;
-  const currentQuestionOptions = currentQuestionInfo?.options;
-  const availableTopics = quizState.quizData;
-  const quizStatus = quizState.quizStatus;
-  const selectedAnswer = quizState.selectedAnswer;
-  const submittedAnswer = quizState.submittedAnswer;
-  const correctAnswer = currentQuestionInfo?.options.find(option => option.correct).id;
-  const chosenTopic = quizState.chosenTopic;
+  const answers = {
+    selected: quizState.selectedAnswer,
+    submitted: quizState.submittedAnswer,
+    correct: currentQuestionObj?.options.find(option => option.correct).id,
+  }
+
+  const quiz = {
+    status: quizState.quizStatus,
+    availableTopics: quizState.quizData,
+    chosenTopic: quizState.chosenTopic,
+    score: quizState.score,
+    maxQuestionNumber: quizState.chosenTopic?.questions.length,
+  }
 
   // load the data from the json file and set IDs for each topic, question, answer
   // id's used for control over whole quiz state. add correct property to each option based on answer
@@ -97,13 +107,13 @@ export const useQuiz = () => {
 
   const submitAnswer = () => {
     quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
-    if (selectedAnswer === correctAnswer) {
+    if (answers.selected === answers.correct) {
       quizDispatch({ type: "SET_SCORE", payload: quizState.score + 1 });
     }
   }
 
   const setNextQuestion = () => {
-    if (quizState.currentQuestion < MAX_QUIZ_ID) {
+    if (quizState.currentQuestion < quiz.maxQuestionNumber) {
       quizDispatch({ type: "SET_CURRENT_QUESTION", payload: quizState.currentQuestion + 1 });
       quizDispatch({ type: "SET_SELECTED_ANSWER", payload: null });
       quizDispatch({ type: "SET_SUBMITTED_ANSWER", payload: null });
@@ -113,6 +123,7 @@ export const useQuiz = () => {
       quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
       }
     }
+
   const reset = () => {
     quizDispatch({ type: "SET_QUIZ_STATUS", payload: "pending" });
     quizDispatch({ type: "SET_CURRENT_QUESTION", payload: 1 });
@@ -121,20 +132,17 @@ export const useQuiz = () => {
     quizDispatch({ type: "SET_SCORE", payload: 0 });
   }
 
+  
+
   return {
-    currentQuestionText,
-    currentQuestionOptions,
-    chosenTopic,
-    availableTopics,
-    quizStatus,
-    selectedAnswer,
-    submittedAnswer,
-    correctAnswer,
+    currentQuestion,
+    answers,
+    quiz,
     setQuizData,
     setSelectedTopic,
     setSelectedAnswer,
-    setNextQuestion,
     submitAnswer,
+    setNextQuestion,
     reset
   };
 };

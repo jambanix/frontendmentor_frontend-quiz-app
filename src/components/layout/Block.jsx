@@ -1,7 +1,7 @@
 
-export const Block = ({children, onClick, className}) => {
+export const Block = ({children, className, ...props}) => {
   return (
-    <div className={`${className || ""} bg-pure-white rounded-xl p-2`} onClick={onClick}>
+    <div className={`${className || ""} bg-pure-white rounded-xl p-2 shadow-lg w-full cursor-pointer`} {...props}>
       {children}
     </div>
   )

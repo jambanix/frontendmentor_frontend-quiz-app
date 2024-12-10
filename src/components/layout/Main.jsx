@@ -7,7 +7,7 @@ export const Main = ({children}) => {
   const deviceSize = useScreenWidth();
 
   return (
-    <main className={`flex flex-col items-center min-h-screen w-full p-4 bg-cover bg-no-repeat bg-${deviceSize}-${theme}`} style={{backgroundImage: `url("images/pattern-background-${deviceSize}-${theme}.svg")`}}>
+    <main className={`flex flex-col self-center min-h-screen w-full p-4 bg-cover bg-no-repeat max-w-[774px] lg:max-w-[1200px] bg-light-grey`} style={{backgroundImage: `url("images/pattern-background-${deviceSize}-${theme}.svg")`}}>
       {children}
     </main>
   )

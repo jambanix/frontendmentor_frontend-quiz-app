@@ -15,7 +15,7 @@ export const useScreenWidth = () => {
   if (screenWidth < 768) {
     return "mobile";
   }
-  else if (screenWidth >= 768 && screenWidth < 1280) {
+  else if (screenWidth >= 768 && screenWidth < 1024) {
     return "tablet";
   }
   else {
