@@ -1,7 +1,7 @@
 
 export const Block = ({children, className, ...props}) => {
   return (
-    <div className={`${className} bg-pure-white rounded-xl p-2 shadow-lg w-full cursor-pointer h-[64px] flex items-center`} {...props}>
+    <div className={`${className} md:text-lg lg:text-xl bg-pure-white rounded-2xl px-4 shadow-lg w-full cursor-pointer h-[64px] md:h-[70px] lg:h-[96px] flex items-center`} {...props}>
       {children}
     </div>
   )

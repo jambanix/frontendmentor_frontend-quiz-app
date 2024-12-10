@@ -29,8 +29,7 @@ function App() {
 
   // event handlers
   const handleSelectTopic = (topic_id) => setSelectedTopic(topic_id);
-  const handleSelectAnswer = (answer_id) =>
-    !answers.submitted && setSelectedAnswer(answer_id);
+  const handleSelectAnswer = (answer_id) => !answers.submitted && setSelectedAnswer(answer_id);
   const handleNextQuestion = () => setNextQuestion();
   const handleSubmitAnswer = () => submitAnswer();
   const handlePlayAgain = () => reset();
@@ -63,7 +62,7 @@ function App() {
         );
 
       case "finished":
-        return <FinishedState onPlayAgain={handlePlayAgain} />;
+        return <FinishedState onPlayAgain={handlePlayAgain} topic={quiz.chosenTopic} score={quiz.score} maxScore={quiz.maxQuestionNumber}/>;
     }
   };
 

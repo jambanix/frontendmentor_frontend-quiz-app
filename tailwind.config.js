@@ -14,7 +14,11 @@ export default {
       "navy": "#3b4d66",
       "purple": "#a729f5",
       "red": "#ee5454",
-      "pure-white": "#ffffff"
+      "pure-white": "#ffffff",
+      "square-orange": "#FFF1E9",
+      "square-green": "#E0FDEF",
+      "square-blue": "#ebf0ff",
+      "square-purple": "#f6e7ff",
     },
     backgroundImage: {
       "desktop-dark": "url('/images/pattern-background-desktop-dark.svg')",

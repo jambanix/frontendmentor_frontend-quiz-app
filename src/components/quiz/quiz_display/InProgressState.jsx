@@ -24,7 +24,7 @@ export const InProgressState = ({
       />
 
       {/* Right side */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4 md:gap-5 lg:gap-6">
         {currentQuestionOptions.map((option, ix) => (
           <Answer
             key={ix}

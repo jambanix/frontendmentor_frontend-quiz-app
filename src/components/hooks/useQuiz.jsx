@@ -132,6 +132,7 @@ export const useQuiz = () => {
   const reset = () => quizDispatch({ type: "RESET" });
   
 
+  console.log(quiz.score, quiz.maxQuestionNumber)
   return {
     currentQuestion,
     answers,
