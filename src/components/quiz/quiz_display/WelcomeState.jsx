@@ -1,8 +1,8 @@
-import { Topic } from "../quiz/Topic";
-import { Block } from "../layout/Block";
-import { Welcome } from "../quiz/Welcome";
+import { Topic } from "../Topic";
+import { Block } from "../../layout/Block";
+import { Welcome } from "../Welcome";
 
-export const WelcomeState = ({availableTopics, onSelectTopic}) => {
+export const WelcomeState = ({ availableTopics, onSelectTopic }) => {
   return (
     <>
       <Welcome />

@@ -1,6 +1,6 @@
-import { Button } from "../ui/Button";
-import { Question } from "../quiz/Question";
-import { Answer } from "../quiz/Answer";
+import { Button } from "../../ui/Button";
+import { Question } from "../Question";
+import { Answer } from "../Answer";
 
 export const InProgressState = ({
   currentQuestionText,

@@ -6,7 +6,7 @@ export const ThemmeToggler = () => {
   const handleChange = () => setIsChecked(!isChecked);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 items-center">
       <img src="images/icon-sun-dark.svg" alt="light mode" />
       <label htmlFor="toggle-theme" className="flex cursor-pointer select-none items-center" onClick={handleChange}>
         <div className="relative">

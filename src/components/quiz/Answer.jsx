@@ -28,19 +28,14 @@ export const Answer = ({
       return "border border-purple";
     }
 
-    // answer selected and submitted
-    else if (hasBeenChosenCorrect) {
+    // show correct answer
+    else if (hasBeenChosenCorrect || showCorrect) {
       return "border border-green";
     }
 
     // answer selected and submitted but incorrect
     else if (hasBeenChosenIncorrect) {
       return "border border-red";
-    }
-
-    // show correct answer
-    else if (showCorrect) {
-      return "border border-green";
     }
   }
 
@@ -74,7 +69,7 @@ export const Answer = ({
   }
   return (
     <Block onClick={handleClick} className={`${bodyClassName()}`} onMouseOver={() => setIsHovering(true)} onMouseOut={() => setIsHovering(false)}>
-      <div className="flex justify-between">
+      <div className="flex justify-between w-full">
         <div className="flex gap-4 items-center">
 
           {/* Letter */}
@@ -86,7 +81,7 @@ export const Answer = ({
 
         {/* Correct/Incorrect icon */}
         <div className="flex items-center">
-          {hasBeenChosenCorrect && <img src="images/icon-correct.svg" alt="correct" className="w-5 h-5"></img>}
+          {(hasBeenChosenCorrect || showCorrect) && <img src="images/icon-correct.svg" alt="correct" className="w-5 h-5"></img>}
           {hasBeenChosenIncorrect && <img src="images/icon-incorrect.svg" alt="incorect" className="w-5 h-5"></img>}
         </div>
       </div>

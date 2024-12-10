@@ -2,13 +2,10 @@ import { useEffect } from "react";
 import { useQuiz } from "./components/hooks/useQuiz";
 import { Main } from "./components/layout/Main";
 import { Grid } from "./components/layout/Grid";
-import { Topic } from "./components/quiz/Topic";
-import { Header } from "./components/layout/Header";
-import { ThemmeToggler } from "./components/ui/ThemeToggler";
 import { ThemeProvider } from "./components/context/ThemeProvider";
-import { WelcomeState } from "./components/quiz_state/WelcomeState";
-import { InProgressState } from "./components/quiz_state/InProgressState";
-import { FinishedState } from "./components/quiz_state/FinishedState";
+import { WelcomeState } from "./components/quiz/quiz_display/WelcomeState";
+import { InProgressState } from "./components/quiz/quiz_display/InProgressState";
+import { FinishedState } from "./components/quiz/quiz_display/FinishedState";
 
 function App() {
   const {
@@ -20,7 +17,7 @@ function App() {
     setSelectedAnswer,
     submitAnswer,
     setNextQuestion,
-    reset
+    reset,
   } = useQuiz();
 
   // load data on first render
@@ -32,7 +29,8 @@ function App() {
 
   // event handlers
   const handleSelectTopic = (topic_id) => setSelectedTopic(topic_id);
-  const handleSelectAnswer = (answer_id) => !answers.submitted && setSelectedAnswer(answer_id);
+  const handleSelectAnswer = (answer_id) =>
+    !answers.submitted && setSelectedAnswer(answer_id);
   const handleNextQuestion = () => setNextQuestion();
   const handleSubmitAnswer = () => submitAnswer();
   const handlePlayAgain = () => reset();
@@ -70,13 +68,12 @@ function App() {
   };
 
   return (
+  
     <ThemeProvider>
-      <Main>
-        <Header>
-          {(quiz.chosenTopic && <Topic {...quiz.chosenTopic} />) || <div></div>}
-          <ThemmeToggler />
-        </Header>
-        <Grid>{renderApp()}</Grid>
+      <Main chosenTopic={quiz.chosenTopic}>
+        <Grid>
+          {renderApp()}
+        </Grid>
       </Main>
     </ThemeProvider>
   );
