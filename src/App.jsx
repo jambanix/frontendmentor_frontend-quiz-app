@@ -62,17 +62,21 @@ function App() {
         );
 
       case "finished":
-        return <FinishedState onPlayAgain={handlePlayAgain} topic={quiz.chosenTopic} score={quiz.score} maxScore={quiz.maxQuestionNumber}/>;
+        return (
+          <FinishedState
+            onPlayAgain={handlePlayAgain}
+            topic={quiz.chosenTopic}
+            score={quiz.score}
+            maxScore={quiz.maxQuestionNumber}
+          />
+        );
     }
   };
 
   return (
-  
     <ThemeProvider>
       <Main chosenTopic={quiz.chosenTopic}>
-        <Grid>
-          {renderApp()}
-        </Grid>
+        <Grid>{renderApp()}</Grid>
       </Main>
     </ThemeProvider>
   );

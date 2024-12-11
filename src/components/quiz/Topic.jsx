@@ -19,7 +19,7 @@ export const Topic = ({title, icon}) => {
         <img src={icon} alt={title} />
       </div>
       
-      <h3 className="font-semibold text-navy">{title}</h3>
+      <h3 className="font-semibold text-navy text-heading-sm">{title}</h3>
     </div>
   )
 }

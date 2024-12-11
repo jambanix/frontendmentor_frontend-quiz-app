@@ -28,6 +28,16 @@ export default {
       "tablet-dark": "url('/images/pattern-background-tablet-dark.svg')",
       "tablet-light": "url('/images/pattern-background-tablet-light.svg')"
     },
+    extend: {
+      fontSize: {
+        "display": "clamp(5.5rem, 6.188vw + 4.05rem, 9rem)",
+        "heading-l": "clamp(2.5rem, 2.652vw + 1.878rem, 4rem)",
+        "heading-m": "clamp(1.25rem, 1.768vw + 0.836rem, 2.25rem)",
+        "heading-sm": "clamp(1.125rem, 1.105vw + 0.866rem, 1.75rem)",
+        "body-m": "clamp(1.125rem, 0.663vw + 0.97rem, 1.5rem)",
+        "body-s": "clamp(0.875rem, 0.663vw + 0.72rem, 1.25rem)"
+      }
+    }
   },
   plugins: [],
 }

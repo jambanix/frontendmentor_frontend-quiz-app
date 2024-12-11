@@ -69,11 +69,11 @@ export const Answer = ({
   }
   return (
     <Block onClick={handleClick} className={`${bodyClassName()}`} onMouseOver={() => setIsHovering(true)} onMouseOut={() => setIsHovering(false)}>
-      <div className="flex justify-between w-full">
-        <div className="flex gap-4 items-center">
+      <div className="flex justify-between w-full text-heading-sm">
+        <div className="flex gap-5 items-center">
 
           {/* Letter */}
-          <div className={`${letterClassName()} w-10 h-10 p-2 rounded-xl transition-colors flex items-center justify-center font-bold`}>{letter}</div>
+          <div className={`${letterClassName()} w-10 h-10 p-4 rounded-xl transition-colors flex items-center justify-center font-semibold text-heading-sm`}>{letter}</div>
 
           {/* Answer */}
           <div>{text}</div>
@@ -81,8 +81,8 @@ export const Answer = ({
 
         {/* Correct/Incorrect icon */}
         <div className="flex items-center">
-          {(hasBeenChosenCorrect || showCorrect) && <img src="images/icon-correct.svg" alt="correct" className="w-5 h-5"></img>}
-          {hasBeenChosenIncorrect && <img src="images/icon-incorrect.svg" alt="incorect" className="w-5 h-5"></img>}
+          {(hasBeenChosenCorrect || showCorrect) && <img src="images/icon-correct.svg" alt="correct" className="w-8 h-8"></img>}
+          {hasBeenChosenIncorrect && <img src="images/icon-incorrect.svg" alt="incorect" className="w-8 h-8"></img>}
         </div>
       </div>
     </Block>
