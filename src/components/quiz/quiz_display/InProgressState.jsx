@@ -12,8 +12,9 @@ export const InProgressState = ({
   submittedAnswer,
   onSelectAnswer,
   onSubmitAnswer,
-  onNextQuestion,
+  onNextQuestion
 }) => {
+
   return (
     <>
       {/* Left side */}

@@ -8,7 +8,8 @@ export const Answer = ({
   onClick,
   selectedAnswer,
   correctAnswer,
-  submittedAnswer
+  submittedAnswer,
+  tabIndex
 }) => {
 
   const [isHovering, setIsHovering] = useState(false);
