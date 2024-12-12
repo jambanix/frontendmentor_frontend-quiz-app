@@ -1,21 +1,32 @@
 import { useState } from "react";
+import { useTheme } from "../context/ThemeProvider";
 
 export const ThemmeToggler = () => {
 
+  const {theme, toggleTheme} = useTheme();
   const [isChecked, setIsChecked] = useState(false);
-  const handleChange = () => setIsChecked(!isChecked);
+  const positionClass = isChecked ? "translate-x-[20px]" : "translate-x-0";
+  const iconClass = theme === "dark" ? "light": "dark";
+
+  const handleChange = () => {
+    if (!isChecked) {
+      setIsChecked(true);
+      toggleTheme("dark");
+    }
+    else {
+      setIsChecked(false);
+      toggleTheme("light");
+    }
+  }
 
   return (
     <div className="flex gap-2 items-center">
-      <img src="images/icon-sun-dark.svg" alt="light mode" />
-      <label htmlFor="toggle-theme" className="flex cursor-pointer select-none items-center" onClick={handleChange}>
-        <div className="relative">
-          <input type="checkbox" className="sr-only" id="toggle-theme" checked={isChecked} onChange={handleChange}/>
-          <div className="block h-8 w-14 rounded-full border border-red bg-dark-navy"></div>
-          <div className="dot bg-light-bluish absolute left-1 top-1 h-6 w-6 rounded-full transition"></div>
-        </div>
+      <img src={`images/icon-sun-${iconClass}.svg`} alt="light mode" />
+      <label className="relative inline-block w-12 h-7 bg-purple rounded-full px-1 cursor-pointer">
+        <input type="checkbox" checked={isChecked} onChange={handleChange} className="invisible"/>
+        <span className={`transition-transform left-1 top-1/2 -translate-y-1/2 absolute bg-pure-white border border-dark-navy/10 w-5 h-5 rounded-full ${positionClass}`}></span>
       </label>
-      <img src="images/icon-moon-dark.svg" alt="dark mode" />
+      <img src={`images/icon-moon-${iconClass}.svg`} alt="dark mode" />
     </div>
   )
 }

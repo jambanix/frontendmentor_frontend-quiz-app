@@ -20,8 +20,6 @@ export const Answer = ({
   const hasBeenChosenIncorrect = isSubmitted && correctAnswer !== id;
   const showCorrect = submittedAnswer !== null && correctAnswer === id;
 
-  //TODO - Refactor this as it's messy
-
   const bodyClassName = () => {
     // answer selected but no answer submitted yet
     if (isSelected && !isSubmitted) {
@@ -42,7 +40,7 @@ export const Answer = ({
   const letterClassName = () => {
 
     if (isHovering && !submittedAnswer && !isSelected) {
-      return "bg-purple/20 text-purple";
+      return "bg-purple/20 dark:bg-purple/50 text-purple dark:text-pure-white";
     }
 
     if (isSelected && !isSubmitted) {
@@ -64,7 +62,7 @@ export const Answer = ({
       return "bg-green text-pure-white";
     }
     else {
-      return "bg-light-grey";
+      return "bg-light-grey text-navy";
     }
   }
   return (
@@ -76,7 +74,7 @@ export const Answer = ({
           <div className={`${letterClassName()} w-10 h-10 p-4 rounded-xl transition-colors flex items-center justify-center font-semibold text-heading-sm`}>{letter}</div>
 
           {/* Answer */}
-          <div>{text}</div>
+          <div className="text-dark-navy dark:text-pure-white">{text}</div>
         </div>
 
         {/* Correct/Incorrect icon */}

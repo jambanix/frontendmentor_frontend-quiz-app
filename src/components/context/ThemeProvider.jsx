@@ -10,9 +10,9 @@ export const ThemeProvider = ({children}) => {
 
   useEffect(() => {
     if (theme === "dark") {
-      document.documentElement.classList.add("dark");
+      document.querySelector("html")?.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      document.querySelector("html")?.classList.remove("dark");
     }
   }, [theme]);
 
