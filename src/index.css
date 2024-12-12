@@ -5,3 +5,7 @@
 body {
   font-family: "Rubik", sans-serif;
 }
+
+progress::-webkit-progress-value {background-color: #a729f5 !important;}
+progress::-moz-progress-bar {background-color: #a729f5 !important;}
+progress {color: #a729f5;}
